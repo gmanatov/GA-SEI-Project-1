@@ -1,20 +1,25 @@
-arrLottery = (arr) => {//This function takes array and gets random element out of it
-    let winEl = Math.floor((Math.random() * (arr.length - 1)) + 0)
+'use strict';
+
+let arrLottery = (arr) => {//This function takes array and gets random element out of it
+    let winEl = Math.floor(Math.random() * arr.length)
     return arr[winEl]
 }
 
 let cells = []
 
-for (i = 0; i < 9; i++){
+
+for (let i = 0; i < 9; i++){
     cells[i] = [];
-    for (j = 0; j < 9; j++){
-        cells[i][j] = j+1;
+    let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    for (let j = 0; j < 9; j++){
+        cells[i][j] = arrLottery(arr);
+        arr.splice((arr.indexOf(cells[i][j])), 1);
     }
 }
 
-for (i = 0; i < 9; i++){
+for (let i = 0; i < 9; i++){
     let row = '';
-    for (j = 0; j < 9; j++){
+    for (let j = 0; j < 9; j++){
         row += cells[i][j] + ' ';
     }
     console.log(row);

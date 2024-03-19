@@ -1,0 +1,20 @@
+table {
+  margin: 0 auto; /* Centers the table on the page */
+  border: 1px solid #f0f0f0; /* Color of outer layer of table */
+}
+
+td {
+  border: 1px solid rgb(255, 255, 255); /* Border around each cell */
+  height: 70px; /* Height of the cells */
+  width: 70px; /* Width of the cells */
+  text-align: center; /* Center text in middle of cell */
+  vertical-align: middle; /* Aligning content in middle vertically */
+}
+
+td:hover {
+  background-color: #f0f0f0; /* Hover will make it this color */
+}
+
+body{
+  background-color: rgb(0, 0, 0); /* Background color of the whole page */
+}

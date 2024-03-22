@@ -131,7 +131,7 @@ function checkWinCondition() {
     if (correctCount === 81) {
         document.querySelector('#result').style.fontSize = '40px';
         document.querySelector('#result').style.color = 'green';
-        document.querySelector('#result').innerHTML = `<b>YOU WON!!!🥳CONGRATZ!!!</b>`;
+        document.querySelector('#result').innerHTML = `<b>VICTORY!🥳</b>`;
         isGameWon = true;
     }
 }
@@ -151,16 +151,15 @@ buttonCells.forEach(function(button) {
 //Main function that inputs numbers into cells
 buttonNums.forEach(function(button) {
     button.addEventListener('click', function() {
-
         if ((markedCellButton)&&(!isGameOver)&&(!isGameWon)) {
             markedCellButton.textContent = button.textContent;
             if (markedCellButton.textContent != SUDOKU[boardChoice].solution[markedCellButton.id[1]][markedCellButton.id[2]]){
                 attemptsLeft--;
                 document.querySelector('#result').style.fontSize = '25px';
                 document.querySelector('#result').style.color = 'yellow';
-                document.querySelector('#result').innerHTML = `<b>ERROR NUMBER ${(3 - attemptsLeft).toString()}!!! I'D BE CAREFUL!!!</b>`
+                document.querySelector('#result').innerHTML = `<b>MISTAKE NUMBER ${(3 - attemptsLeft).toString()}!!! I'D BE CAREFUL!!!</b>`
                 if (attemptsLeft == 0){
-                    document.querySelector('#result').style.fontSize = '70px';
+                    document.querySelector('#result').style.fontSize = '50px';
                     document.querySelector('#result').style.color = 'red';
                     document.querySelector('#result').innerHTML = `<b>GAME OVER!!😭</b>`
                     isGameOver = true;
@@ -178,6 +177,7 @@ buttonNums.forEach(function(button) {
 
 //Reset button logic, it only reset puzzle that you already had
 document.querySelector('#reset').addEventListener('click', function() {
+    attemptsLeft = MAX_GUESSES;
     buttonCells.forEach(function(button) {
         if (SUDOKU[boardChoice].board[button.id[1]][button.id[2]] !== 0){
             button.innerHTML = SUDOKU[boardChoice].board[button.id[1]][button.id[2]];
@@ -185,11 +185,11 @@ document.querySelector('#reset').addEventListener('click', function() {
         else if (SUDOKU[boardChoice].board[button.id[1]][button.id[2]] == 0){
             button.innerHTML = '';
         }
-        attemptsLeft = MAX_GUESSES;
         isGameOver = false;
+        isGameWon = false;
         document.querySelector('#result').style.fontSize = '20px';
         document.querySelector('#result').style.color = 'white';
-        document.querySelector('#result').innerHTML = '<b>Select cell to fill and press desired number<br> 3 ERRORS WILL LEAD TO DEATH!!!</b>'
+        document.querySelector('#result').innerHTML = '<b>Select cell to fill and press desired number<br> 3 MISTAKES WILL LEAD TO DEATH!!!</b>'
     })
 })
 
@@ -197,6 +197,12 @@ document.querySelector('#reset').addEventListener('click', function() {
 document.querySelector('#new-puzzle').addEventListener('click', function() {
     boardChoice = Math.floor(Math.random() * 3);
     cleanBoard();
+    isGameOver = false;
+    isGameWon = false;
+    attemptsLeft = MAX_GUESSES;
+    document.querySelector('#result').style.fontSize = '20px';
+    document.querySelector('#result').style.color = 'white';
+    document.querySelector('#result').innerHTML = '<b>Select cell to fill and press desired number<br> 3 MISTAKES WILL LEAD TO DEATH!!!</b>'
     buttonCells.forEach(function(button) {
         if (SUDOKU[boardChoice].board[button.id[1]][button.id[2]] !== 0){
             button.innerHTML = SUDOKU[boardChoice].board[button.id[1]][button.id[2]];

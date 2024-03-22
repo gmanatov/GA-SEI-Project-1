@@ -87,8 +87,40 @@ let boardChoice = Math.floor(Math.random() * 3);
 // buttonCells.innerHTML = '11';
 
 const buttonCells = document.querySelectorAll('.button-cell');
+
 buttonCells.forEach(function(button) {
     if (SUDOKU[boardChoice].board[button.id[1]][button.id[2]] !== 0){
         button.innerHTML = SUDOKU[boardChoice].board[button.id[1]][button.id[2]];
     }
+})
+
+buttonCells.forEach(function(button) {
+    button.addEventListener('click', function() {
+        if (button.textContent == ''){
+            markedCellButton = button;}
+    });
+})
+
+const buttonNums = document.querySelectorAll('.button-num');
+
+buttonNums.forEach(function(button) {
+    button.addEventListener('click', function() {
+
+        if (markedCellButton) {
+            markedCellButton.textContent = button.textContent;
+            markedCellButton = null;
+        }
+
+    });
+})
+
+document.querySelector('#reset').addEventListener('click', function() {
+    buttonCells.forEach(function(button) {
+        if (SUDOKU[boardChoice].board[button.id[1]][button.id[2]] !== 0){
+            button.innerHTML = SUDOKU[boardChoice].board[button.id[1]][button.id[2]];
+        }
+        else if (SUDOKU[boardChoice].board[button.id[1]][button.id[2]] == 0){
+            button.innerHTML = '';
+        }
+    })
 })

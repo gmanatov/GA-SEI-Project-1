@@ -1,5 +1,6 @@
-
+/*---------------------*/
 /*----- constants -----*/
+/*---------------------*/
 const MAX_GUESSES = 3;
 const SUDOKU = [
         {//1
@@ -77,47 +78,37 @@ const SUDOKU = [
     },
 ]
 
-const buttonCells = document.querySelectorAll('.button-cell');
-const buttonNums = document.querySelectorAll('.button-num');
+const buttonCells = document.querySelectorAll('.button-cell'); //DOM grabbing all board cells
+const buttonNums = document.querySelectorAll('.button-num'); //DOM grabbing all numpad cells
 
-//console.log(SUDOKU[0].board[0][3]);
-
+/*---------------------------*/
 /*----- state variables -----*/
+/*---------------------------*/
 
 let isGameOver = false;
 let isGameWon = false;
-let winCount = 0;
-let boardChoice = Math.floor(Math.random() * 3);
-let attemptsLeft = MAX_GUESSES;
-//console.log(boardChoice);
+let boardChoice = Math.floor(Math.random() * 3); //Randoming puzzle from the SUDOKU object that containts all of them, plus solutions
+let attemptsLeft = MAX_GUESSES; //Attempts counter
 
-// const buttonCells = document.querySelector('#b11');
-// buttonCells.innerHTML = '11';
-
+/*---------------------*/
 /*----- functions -----*/
+/*---------------------*/
 
+//Function that makes sure to not include any board element that has '0' in it converting it to ' ' since zeroes are how 'unknowns' in puzzles are stored
 buttonCells.forEach(function(button) {
     if (SUDOKU[boardChoice].board[button.id[1]][button.id[2]] !== 0){
         button.innerHTML = SUDOKU[boardChoice].board[button.id[1]][button.id[2]];
     }
 })
 
-// buttonCells.forEach(function(button) {
-//     if (button.textContent == SUDOKU[boardChoice].solution[button.id[1]][button.id[2]]){
-//         document.querySelector('#result').style.fontSize = '70px';
-//         document.querySelector('#result').style.color = 'green';
-//         document.querySelector('#result').innerHTML = `<b>YOU WON!!! CONGRATZ!!!</b>`
-//         isGameWon = true;
-//     }
-
-// })
-
+//Function we use for a process of loading new puzzle
 let cleanBoard = () => {
     buttonCells.forEach(function(button) {
         button.textContent = '';
     })
 }
 
+//Function made to demonstrate WIN logic and render WIN message
 let winGame = () => {
     buttonCells.forEach(function(button) {
         if (button.id != 'b01'){
@@ -126,8 +117,30 @@ let winGame = () => {
     })
 }
 
-/*----- event listeners -----*/
+//Check for a Winning state
+function checkWinCondition() {
+    let correctCount = 0;
+    buttonCells.forEach(function(button) {
+        const row = parseInt(button.id[1], 10);
+        const col = parseInt(button.id[2], 10);
+        if (button.textContent == SUDOKU[boardChoice].solution[row][col]) {
+            correctCount++;
+        }
+    });
 
+    if (correctCount === 81) {
+        document.querySelector('#result').style.fontSize = '40px';
+        document.querySelector('#result').style.color = 'green';
+        document.querySelector('#result').innerHTML = `<b>YOU WON!!!🥳CONGRATZ!!!</b>`;
+        isGameWon = true;
+    }
+}
+
+/*---------------------------*/
+/*----- event listeners -----*/
+/*---------------------------*/
+
+//Making sure that the button-cell we are about to fill is empty
 buttonCells.forEach(function(button) {
     button.addEventListener('click', function() {
         if (button.textContent == ''){
@@ -135,6 +148,7 @@ buttonCells.forEach(function(button) {
     });
 })
 
+//Main function that inputs numbers into cells
 buttonNums.forEach(function(button) {
     button.addEventListener('click', function() {
 
@@ -148,23 +162,21 @@ buttonNums.forEach(function(button) {
                 if (attemptsLeft == 0){
                     document.querySelector('#result').style.fontSize = '70px';
                     document.querySelector('#result').style.color = 'red';
-                    document.querySelector('#result').innerHTML = `<b>GAME OVER!!!</b>`
+                    document.querySelector('#result').innerHTML = `<b>GAME OVER!!😭</b>`
                     isGameOver = true;
                 }
             }
-            else {
-                document.querySelector('#result').style.fontSize = '40px';
-                document.querySelector('#result').style.color = 'green';
-                document.querySelector('#result').innerHTML = `<b>YOU WON!!! CONGRATZ!!!</b>`
-                isGameWon = true;
-            }
 
             markedCellButton = null;
+            if (!isGameOver && !isGameWon) {
+                checkWinCondition();
+            }
         }
 
     });
 })
 
+//Reset button logic, it only reset puzzle that you already had
 document.querySelector('#reset').addEventListener('click', function() {
     buttonCells.forEach(function(button) {
         if (SUDOKU[boardChoice].board[button.id[1]][button.id[2]] !== 0){
@@ -177,10 +189,11 @@ document.querySelector('#reset').addEventListener('click', function() {
         isGameOver = false;
         document.querySelector('#result').style.fontSize = '20px';
         document.querySelector('#result').style.color = 'white';
-        document.querySelector('#result').innerHTML = '<b>Please select cell to fill and press desired number<br> 3 ERRORS WILL LEAD TO DEATH!!!</b>'
+        document.querySelector('#result').innerHTML = '<b>Select cell to fill and press desired number<br> 3 ERRORS WILL LEAD TO DEATH!!!</b>'
     })
 })
 
+//New puzzle, it will replace whole puzzle with a new one
 document.querySelector('#new-puzzle').addEventListener('click', function() {
     boardChoice = Math.floor(Math.random() * 3);
     cleanBoard();

@@ -77,16 +77,20 @@ const SUDOKU = [
     },
 ]
 
+const buttonCells = document.querySelectorAll('.button-cell');
+const buttonNums = document.querySelectorAll('.button-num');
+
 //console.log(SUDOKU[0].board[0][3]);
 
 
+let isGameOver = false;
 let boardChoice = Math.floor(Math.random() * 3);
 //console.log(boardChoice);
 
 // const buttonCells = document.querySelector('#b11');
 // buttonCells.innerHTML = '11';
 
-const buttonCells = document.querySelectorAll('.button-cell');
+
 
 buttonCells.forEach(function(button) {
     if (SUDOKU[boardChoice].board[button.id[1]][button.id[2]] !== 0){
@@ -101,13 +105,20 @@ buttonCells.forEach(function(button) {
     });
 })
 
-const buttonNums = document.querySelectorAll('.button-num');
-
+let attemptsLeft = MAX_GUESSES;
 buttonNums.forEach(function(button) {
     button.addEventListener('click', function() {
 
-        if (markedCellButton) {
+        if ((markedCellButton)&&(!isGameOver)) {
             markedCellButton.textContent = button.textContent;
+            if (markedCellButton.textContent != SUDOKU[boardChoice].solution[markedCellButton.id[1]][markedCellButton.id[2]]){
+                attemptsLeft--;
+                document.querySelector('#result').innerHTML = `<b>ERROR NUMBER ${(3 - attemptsLeft).toString()}!!! </b>`
+                if (attemptsLeft == 0){
+                    document.querySelector('#result').innerHTML = `<b>GAME OVER!!!</b>`
+                    isGameOver = true;
+                }
+            }
             markedCellButton = null;
         }
 
@@ -122,5 +133,8 @@ document.querySelector('#reset').addEventListener('click', function() {
         else if (SUDOKU[boardChoice].board[button.id[1]][button.id[2]] == 0){
             button.innerHTML = '';
         }
+        attemptsLeft = MAX_GUESSES;
+        isGameOver = false;
+        document.querySelector('#result').innerHTML = '<b>3 ERRORS WILL LEAD TO DEATH!!!</b>'
     })
 })

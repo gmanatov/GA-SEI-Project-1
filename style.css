@@ -10,7 +10,7 @@
     margin-top: 50px;
     justify-content: center;
   }
-  #turn{
+  #result{
     color: rgb(255, 255, 255);
     font-size: 20px;
   }
@@ -19,7 +19,7 @@
     text-align: center;
     grid-template-columns: repeat(9, 50px);
     grid-gap: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
   }
   .grid-num {
     display: grid;

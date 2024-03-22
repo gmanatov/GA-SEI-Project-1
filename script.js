@@ -1,15 +1,18 @@
-const sudoku = [
+
+/*----- constants -----*/
+const MAX_GUESSES = 3;
+const SUDOKU = [
         {//1
         board: [
-            [7,	0, 0, 8, 5,	3, 9, 0, 0],
-            [1,	4, 8, 0, 9,	0, 3, 5, 0],
-            [0,	0, 5, 4, 0,	0, 2, 6, 0],
-            [0,	1, 0, 7, 0,	0, 6, 9, 0],
-            [0,	0, 0, 0, 3,	5, 0, 0, 0],
-            [8,	5, 7, 9, 0,	0, 1, 0, 0],
-            [0,	8, 0, 0, 0,	9, 5, 0, 0],
-            [5,	7, 9, 0, 0,	6, 0, 1, 3],
-            [0,	6, 3, 5, 8,	0, 4, 0, 9]
+            [7,	0, 0, 8, 5, 3, 9, 0, 0],
+            [1,	4, 8, 0, 9, 0, 3, 5, 0],
+            [0,	0, 5, 4, 0, 0, 2, 6, 0],
+            [0,	1, 0, 7, 0, 0, 6, 9, 0],
+            [0,	0, 0, 0, 3, 5, 0, 0, 0],
+            [8,	5, 7, 9, 0, 0, 1, 0, 0],
+            [0,	8, 0, 0, 0, 9, 5, 0, 0],
+            [5,	7, 9, 0, 0, 6, 0, 1, 3],
+            [0,	6, 3, 5, 8, 0, 4, 0, 9]
         ],
         solution: [
             [7,	2, 6, 8, 5,	3, 9, 4, 1],
@@ -74,4 +77,18 @@ const sudoku = [
     },
 ]
 
-    console.log(sudoku[2].solution[4][2]);
+//console.log(SUDOKU[0].board[0][3]);
+
+
+let boardChoice = Math.floor(Math.random() * 3);
+//console.log(boardChoice);
+
+// const buttonCells = document.querySelector('#b11');
+// buttonCells.innerHTML = '11';
+
+const buttonCells = document.querySelectorAll('.button-cell');
+buttonCells.forEach(function(button) {
+    if (SUDOKU[boardChoice].board[button.id[1]][button.id[2]] !== 0){
+        button.innerHTML = SUDOKU[boardChoice].board[button.id[1]][button.id[2]];
+    }
+})

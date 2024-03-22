@@ -82,21 +82,51 @@ const buttonNums = document.querySelectorAll('.button-num');
 
 //console.log(SUDOKU[0].board[0][3]);
 
+/*----- state variables -----*/
 
 let isGameOver = false;
+let isGameWon = false;
+let winCount = 0;
 let boardChoice = Math.floor(Math.random() * 3);
+let attemptsLeft = MAX_GUESSES;
 //console.log(boardChoice);
 
 // const buttonCells = document.querySelector('#b11');
 // buttonCells.innerHTML = '11';
 
-
+/*----- functions -----*/
 
 buttonCells.forEach(function(button) {
     if (SUDOKU[boardChoice].board[button.id[1]][button.id[2]] !== 0){
         button.innerHTML = SUDOKU[boardChoice].board[button.id[1]][button.id[2]];
     }
 })
+
+// buttonCells.forEach(function(button) {
+//     if (button.textContent == SUDOKU[boardChoice].solution[button.id[1]][button.id[2]]){
+//         document.querySelector('#result').style.fontSize = '70px';
+//         document.querySelector('#result').style.color = 'green';
+//         document.querySelector('#result').innerHTML = `<b>YOU WON!!! CONGRATZ!!!</b>`
+//         isGameWon = true;
+//     }
+
+// })
+
+let cleanBoard = () => {
+    buttonCells.forEach(function(button) {
+        button.textContent = '';
+    })
+}
+
+let winGame = () => {
+    buttonCells.forEach(function(button) {
+        if (button.id != 'b01'){
+            button.textContent = SUDOKU[boardChoice].solution[button.id[1]][button.id[2]];
+        }
+    })
+}
+
+/*----- event listeners -----*/
 
 buttonCells.forEach(function(button) {
     button.addEventListener('click', function() {
@@ -105,20 +135,30 @@ buttonCells.forEach(function(button) {
     });
 })
 
-let attemptsLeft = MAX_GUESSES;
 buttonNums.forEach(function(button) {
     button.addEventListener('click', function() {
 
-        if ((markedCellButton)&&(!isGameOver)) {
+        if ((markedCellButton)&&(!isGameOver)&&(!isGameWon)) {
             markedCellButton.textContent = button.textContent;
             if (markedCellButton.textContent != SUDOKU[boardChoice].solution[markedCellButton.id[1]][markedCellButton.id[2]]){
                 attemptsLeft--;
-                document.querySelector('#result').innerHTML = `<b>ERROR NUMBER ${(3 - attemptsLeft).toString()}!!! </b>`
+                document.querySelector('#result').style.fontSize = '25px';
+                document.querySelector('#result').style.color = 'yellow';
+                document.querySelector('#result').innerHTML = `<b>ERROR NUMBER ${(3 - attemptsLeft).toString()}!!! I'D BE CAREFUL!!!</b>`
                 if (attemptsLeft == 0){
+                    document.querySelector('#result').style.fontSize = '70px';
+                    document.querySelector('#result').style.color = 'red';
                     document.querySelector('#result').innerHTML = `<b>GAME OVER!!!</b>`
                     isGameOver = true;
                 }
             }
+            else {
+                document.querySelector('#result').style.fontSize = '40px';
+                document.querySelector('#result').style.color = 'green';
+                document.querySelector('#result').innerHTML = `<b>YOU WON!!! CONGRATZ!!!</b>`
+                isGameWon = true;
+            }
+
             markedCellButton = null;
         }
 
@@ -135,6 +175,18 @@ document.querySelector('#reset').addEventListener('click', function() {
         }
         attemptsLeft = MAX_GUESSES;
         isGameOver = false;
-        document.querySelector('#result').innerHTML = '<b>3 ERRORS WILL LEAD TO DEATH!!!</b>'
+        document.querySelector('#result').style.fontSize = '20px';
+        document.querySelector('#result').style.color = 'white';
+        document.querySelector('#result').innerHTML = '<b>Please select cell to fill and press desired number<br> 3 ERRORS WILL LEAD TO DEATH!!!</b>'
+    })
+})
+
+document.querySelector('#new-puzzle').addEventListener('click', function() {
+    boardChoice = Math.floor(Math.random() * 3);
+    cleanBoard();
+    buttonCells.forEach(function(button) {
+        if (SUDOKU[boardChoice].board[button.id[1]][button.id[2]] !== 0){
+            button.innerHTML = SUDOKU[boardChoice].board[button.id[1]][button.id[2]];
+        }
     })
 })
